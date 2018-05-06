@@ -1,3 +1,10 @@
 <div>
-  Hola Mundo ! - {{person.name}}
+    {{title}} - {{author}}
 </div>
+
+<input type="text"
+       (keyup.enter)="onKeyPressInput()">
+
+
+<app-items *ngFor="let task of listTasks"
+           [task]="task"></app-items>
