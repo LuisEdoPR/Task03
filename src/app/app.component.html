@@ -3,8 +3,15 @@
 </div>
 
 <input type="text"
-       (keyup.enter)="onKeyPressInput()">
+       (keyup.enter)="onKeyPressInput($event)">
+<label (click)="clickSelectAll()"
+       class="lblSelectAll">+</label>
 
+<ul>
+    <app-items *ngFor="let task of listTasks"
+               [task]="task"
+               (removeItem)="onRemoveItem($event)"
+               (changeSelectedItem)="onChangeSelectedItem($event)"></app-items>
+</ul>
 
-<app-items *ngFor="let task of listTasks"
-           [task]="task"></app-items>
+{{getItemsLeft()}} items left
