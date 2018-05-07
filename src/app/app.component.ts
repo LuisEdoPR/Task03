@@ -1,6 +1,8 @@
 import { element } from 'protractor';
 import { Component } from '@angular/core';
 import { Item } from './model/item';
+import { v4 as uuid } from 'uuid';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
 	selector: 'app-root',
@@ -8,23 +10,29 @@ import { Item } from './model/item';
 	styleUrls: [ './app.component.scss' ]
 })
 export class AppComponent {
-	title = 'ToDo';
+	title = 'Todo';
 	author = 'LuisEdoPR';
 	listTasks: Item[];
-	itemId = 1;
 	selectAll = true;
+	statusShow = 'ALL';
+	urlDataIni = 'https://gist.githubusercontent.com/jdjuan/165053e6cb479a840c88e3e94b33e724/raw/4542ef950b2b32fbe2eea0b3df0338ffe67eae12/todo.json';
 
-	constructor() {
+	constructor(private http: HttpClient) {
 		this.listTasks = new Array<Item>();
-		this.listTasks.push(new Item(this.getItemId(), 'attend the boot camp', 'A'));
-		this.listTasks.push(new Item(this.getItemId(), 'do the homework', 'A'));
-		this.listTasks.push(new Item(this.getItemId(), 'bring candy to Juan', 'A'));
-		this.listTasks.push(new Item(this.getItemId(), 'participate', 'A'));
+		this.http.get<any>(this.urlDataIni).subscribe((obj) =>
+			obj.forEach((item) => {
+				this.listTasks.push(new Item(uuid(), item, 'A'));
+			})
+		);
+		// this.listTasks.push(new Item(uuid(), 'attend the boot camp', 'A'));
+		// this.listTasks.push(new Item(uuid(), 'do the homework', 'A'));
+		// this.listTasks.push(new Item(uuid(), 'bring candy to Juan', 'A'));
+		// this.listTasks.push(new Item(uuid(), 'participate', 'A'));
 	}
 
 	onKeyPressInput($event) {
 		if ($event.target.value.trim()) {
-			this.listTasks.push(new Item(this.getItemId(), $event.target.value.trim(), 'A'));
+			this.listTasks.push(new Item(uuid(), $event.target.value.trim(), 'A'));
 			$event.target.value = '';
 			this.selectAll = true;
 		}
@@ -38,16 +46,9 @@ export class AppComponent {
 		this.selectAll = true;
 	}
 
-	getItemId(): number {
-		const currentId = this.itemId;
-		this.itemId = this.itemId + 1;
-		return currentId;
-	}
-
 	clickSelectAll() {
-		const listTasksTmp = document.querySelectorAll('[id=checkbox]');
-		for (let index = 0; index < listTasksTmp.length; index++) {
-			listTasksTmp[index].checked = this.selectAll;
+		for (let index = 0; index < this.listTasks.length; index++) {
+			this.listTasks[index].itemStatus = this.selectAll ? 'C' : 'A';
 		}
 		this.selectAll = !this.selectAll;
 	}
@@ -61,43 +62,19 @@ export class AppComponent {
 	}
 
 	onClickClearComplete() {
-		const listTasksTmp = document.querySelectorAll('[id=itemList]');
-		for (let index = 0; index < listTasksTmp.length; index++) {
-			if (listTasksTmp[index].firstElementChild.checked) {
-				this.listTasks = this.listTasks.filter(
-					(obj) => obj.itemId !== parseInt(listTasksTmp[index].firstElementChild.name)
-				);
-			}
-		}
+		this.listTasks = this.listTasks.filter((obj) => obj.itemStatus !== 'C');
 	}
 
 	onClickComplete() {
-		const listTasksTmp = document.querySelectorAll('[id=itemList]');
-		for (let index = 0; index < listTasksTmp.length; index++) {
-			if (listTasksTmp[index].firstElementChild.checked) {
-				listTasksTmp[index].style.display = '';
-			} else {
-				listTasksTmp[index].style.display = 'none';
-			}
-		}
+		this.statusShow = 'C';
 	}
 
 	onClickActive() {
-		const listTasksTmp = document.querySelectorAll('[id=itemList]');
-		for (let index = 0; index < listTasksTmp.length; index++) {
-			if (listTasksTmp[index].firstElementChild.checked) {
-				listTasksTmp[index].style.display = 'none';
-			} else {
-				listTasksTmp[index].style.display = '';
-			}
-		}
+		this.statusShow = 'A';
 	}
 
 	onClickAll() {
-		const listTasksTmp = document.querySelectorAll('[id=itemList]');
-		for (let index = 0; index < listTasksTmp.length; index++) {
-			listTasksTmp[index].style.display = '';
-		}
+		this.statusShow = 'ALL';
 	}
 
 	private getItemsLeft() {

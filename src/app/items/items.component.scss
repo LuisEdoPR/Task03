@@ -5,7 +5,14 @@ button {
     font-weight: bold;
 }
 
-.items {
+.item_complete {
+    font-size: 30px;
+    margin: 10px;
+    text-decoration: line-through;
+    color: lightgray;
+}
+
+.item_active {
     font-size: 30px;
     margin: 10px;
 }

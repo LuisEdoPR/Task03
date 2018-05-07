@@ -10,6 +10,7 @@ export class ItemsComponent implements OnInit {
 	@Input() task;
 	@Output() removeItem = new EventEmitter<Item>();
 	@Output() changeSelectedItem = new EventEmitter();
+	@Input() statusShow = 'ALL';
 	constructor() {}
 
 	onRemoveItem(item: Item) {

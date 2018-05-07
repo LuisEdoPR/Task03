@@ -1,10 +1,13 @@
 <li appShowOptionDelete
+    *ngIf="'ALL'===statusShow || statusShow===task.itemStatus"
     id='itemList'
+    [ngClass]="{'item_active': task.itemStatus==='A', 'item_complete': task.itemStatus==='C'}"
     class="items">
     <input type="checkbox"
            name="{{task.itemId}}"
            id="checkbox"
            class="checkbox"
+           [checked]="task.itemStatus==='C'"
            (change)="onSelectItem(task,$event)">{{task.description}}
     <button (click)="onRemoveItem(task)"
             style="display: none;">X</button>

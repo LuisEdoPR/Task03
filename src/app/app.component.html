@@ -1,31 +1,36 @@
-<div>
+<div class="mainTitle">
     {{title}} - {{author}}
 </div>
+<div>
+    <input type="text"
+           (keyup.enter)="onKeyPressInput($event)">
+    <label (click)="clickSelectAll()"
+           class="lblSelectAll">+</label>
 
-<input type="text"
-       (keyup.enter)="onKeyPressInput($event)">
-<label (click)="clickSelectAll()"
-       class="lblSelectAll">+</label>
+    <ul>
+        <app-items *ngFor="let task of listTasks"
+                   [task]="task"
+                   [statusShow]="statusShow"
+                   (removeItem)="onRemoveItem($event)"
+                   (changeSelectedItem)="onChangeSelectedItem($event)">
+        </app-items>
+    </ul>
 
-<ul>
-    <app-items *ngFor="let task of listTasks"
-               [task]="task"
-               (removeItem)="onRemoveItem($event)"
-               (changeSelectedItem)="onChangeSelectedItem($event)"></app-items>
-</ul>
-
-<label>
-    {{getItemsLeft()}} items left
-</label>
-<button (mouseenter)="onMouseEnter($event)"
-        (mouseleave)="onMouseLeave($event)"
-        (click)="onClickAll()">All</button>
-<button (mouseenter)="onMouseEnter($event)"
-        (mouseleave)="onMouseLeave($event)"
-        (click)="onClickActive()">Active</button>
-<button (mouseenter)="onMouseEnter($event)"
-        (mouseleave)="onMouseLeave($event)"
-        (click)="onClickComplete()">Complete</button>
-<button (mouseenter)="onMouseEnter($event)"
-        (mouseleave)="onMouseLeave($event)"
-        (click)="onClickClearComplete()">Clear complete</button>
+    <div *ngIf="listTasks.length>0">
+        <label>
+        {{getItemsLeft()}} items left
+    </label>
+        <button (mouseenter)="onMouseEnter($event)"
+                (mouseleave)="onMouseLeave($event)"
+                (click)="onClickAll()">All</button>
+        <button (mouseenter)="onMouseEnter($event)"
+                (mouseleave)="onMouseLeave($event)"
+                (click)="onClickActive()">Active</button>
+        <button (mouseenter)="onMouseEnter($event)"
+                (mouseleave)="onMouseLeave($event)"
+                (click)="onClickComplete()">Completed</button>
+        <button (mouseenter)="onMouseEnter($event)"
+                (mouseleave)="onMouseLeave($event)"
+                (click)="onClickClearComplete()">Clear completed</button>
+    </div>
+</div>
