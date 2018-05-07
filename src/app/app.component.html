@@ -14,4 +14,18 @@
                (changeSelectedItem)="onChangeSelectedItem($event)"></app-items>
 </ul>
 
-{{getItemsLeft()}} items left
+<label>
+    {{getItemsLeft()}} items left
+</label>
+<button (mouseenter)="onMouseEnter($event)"
+        (mouseleave)="onMouseLeave($event)"
+        (click)="onClickAll()">All</button>
+<button (mouseenter)="onMouseEnter($event)"
+        (mouseleave)="onMouseLeave($event)"
+        (click)="onClickActive()">Active</button>
+<button (mouseenter)="onMouseEnter($event)"
+        (mouseleave)="onMouseLeave($event)"
+        (click)="onClickComplete()">Complete</button>
+<button (mouseenter)="onMouseEnter($event)"
+        (mouseleave)="onMouseLeave($event)"
+        (click)="onClickClearComplete()">Clear complete</button>

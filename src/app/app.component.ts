@@ -16,15 +16,15 @@ export class AppComponent {
 
 	constructor() {
 		this.listTasks = new Array<Item>();
-		this.listTasks.push(new Item(this.getItemId(), 'attend the boot camp'));
-		this.listTasks.push(new Item(this.getItemId(), 'do the homework'));
-		this.listTasks.push(new Item(this.getItemId(), 'bring candy to Juan'));
-		this.listTasks.push(new Item(this.getItemId(), 'participate'));
+		this.listTasks.push(new Item(this.getItemId(), 'attend the boot camp', 'A'));
+		this.listTasks.push(new Item(this.getItemId(), 'do the homework', 'A'));
+		this.listTasks.push(new Item(this.getItemId(), 'bring candy to Juan', 'A'));
+		this.listTasks.push(new Item(this.getItemId(), 'participate', 'A'));
 	}
 
 	onKeyPressInput($event) {
 		if ($event.target.value.trim()) {
-			this.listTasks.push(new Item(this.getItemId(), $event.target.value.trim()));
+			this.listTasks.push(new Item(this.getItemId(), $event.target.value.trim(), 'A'));
 			$event.target.value = '';
 			this.selectAll = true;
 		}
@@ -50,6 +50,54 @@ export class AppComponent {
 			listTasksTmp[index].checked = this.selectAll;
 		}
 		this.selectAll = !this.selectAll;
+	}
+
+	onMouseLeave($event) {
+		$event.target.style.backgroundColor = null;
+	}
+
+	onMouseEnter($event) {
+		$event.target.style.backgroundColor = 'lightblue';
+	}
+
+	onClickClearComplete() {
+		const listTasksTmp = document.querySelectorAll('[id=itemList]');
+		for (let index = 0; index < listTasksTmp.length; index++) {
+			if (listTasksTmp[index].firstElementChild.checked) {
+				this.listTasks = this.listTasks.filter(
+					(obj) => obj.itemId !== parseInt(listTasksTmp[index].firstElementChild.name)
+				);
+			}
+		}
+	}
+
+	onClickComplete() {
+		const listTasksTmp = document.querySelectorAll('[id=itemList]');
+		for (let index = 0; index < listTasksTmp.length; index++) {
+			if (listTasksTmp[index].firstElementChild.checked) {
+				listTasksTmp[index].style.display = '';
+			} else {
+				listTasksTmp[index].style.display = 'none';
+			}
+		}
+	}
+
+	onClickActive() {
+		const listTasksTmp = document.querySelectorAll('[id=itemList]');
+		for (let index = 0; index < listTasksTmp.length; index++) {
+			if (listTasksTmp[index].firstElementChild.checked) {
+				listTasksTmp[index].style.display = 'none';
+			} else {
+				listTasksTmp[index].style.display = '';
+			}
+		}
+	}
+
+	onClickAll() {
+		const listTasksTmp = document.querySelectorAll('[id=itemList]');
+		for (let index = 0; index < listTasksTmp.length; index++) {
+			listTasksTmp[index].style.display = '';
+		}
 	}
 
 	private getItemsLeft() {

@@ -17,6 +17,11 @@ export class ItemsComponent implements OnInit {
 	}
 
 	onSelectItem(item: Item, $event) {
+		if (item.itemStatus === 'A') {
+			item.itemStatus = 'C';
+		} else {
+			item.itemStatus = 'A';
+		}
 		this.changeSelectedItem.emit($event);
 	}
 

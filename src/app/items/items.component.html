@@ -1,8 +1,11 @@
-<li appShowOptionDelete>
+<li appShowOptionDelete
+    id='itemList'
+    class="items">
     <input type="checkbox"
-           name="checkbox"
+           name="{{task.itemId}}"
            id="checkbox"
-           (change)="onSelectItem(task,$event)"> {{task.description}}
+           class="checkbox"
+           (change)="onSelectItem(task,$event)">{{task.description}}
     <button (click)="onRemoveItem(task)"
             style="display: none;">X</button>
 </li>
