@@ -2,11 +2,12 @@
     {{title}}
 </div>
 <div>
-    <input type="text"
-           (keyup.enter)="onKeyPressInput($event)">
     <label *ngIf="listTasks.length>0"
-           (click)="clickOptionSelectedAll()"
-           class="lblSelectAll">+</label>
+        (click)="clickOptionSelectedAll()"
+        class="lblSelectAll">+</label>
+
+    <input type="text" class="inputTask"
+           (keyup.enter)="onKeyPressInput($event)">
 
     <ul>
         <app-items *ngFor="let task of listTasks"
