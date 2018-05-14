@@ -10,7 +10,9 @@ export class ItemsComponent implements OnInit {
 	@Input() task;
 	@Output() removeItem = new EventEmitter<Item>();
 	@Output() changeSelectedItem = new EventEmitter();
-	@Input() statusShow = 'ALL';
+	@Input() globalStatusSelected;
+	itemStatusActive = 'A';
+	itemStatusComplete = 'C';
 	constructor() {}
 
 	onRemoveItem(item: Item) {
@@ -18,10 +20,10 @@ export class ItemsComponent implements OnInit {
 	}
 
 	onSelectItem(item: Item, $event) {
-		if (item.itemStatus === 'A') {
-			item.itemStatus = 'C';
+		if (item.itemStatus === this.itemStatusActive) {
+			item.itemStatus = this.itemStatusComplete;
 		} else {
-			item.itemStatus = 'A';
+			item.itemStatus = this.itemStatusActive;
 		}
 		this.changeSelectedItem.emit($event);
 	}

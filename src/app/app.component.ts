@@ -10,31 +10,31 @@ import { HttpClient } from '@angular/common/http';
 	styleUrls: [ './app.component.scss' ]
 })
 export class AppComponent {
-	title = 'Todo';
-	author = 'LuisEdoPR';
+	title = 'Todo - LuisEdoPR';
 	listTasks: Item[];
-	selectAll = true;
-	statusShow = 'ALL';
+	optionSelectedAll = true;
+	globalStatusSelected = 'ALL';
+	itemStatusActive = 'A';
+	itemStatusComplete = 'C';
+
 	urlDataIni = 'https://gist.githubusercontent.com/jdjuan/165053e6cb479a840c88e3e94b33e724/raw/4542ef950b2b32fbe2eea0b3df0338ffe67eae12/todo.json';
 
 	constructor(private http: HttpClient) {
 		this.listTasks = new Array<Item>();
 		this.http.get<any>(this.urlDataIni).subscribe((obj) =>
 			obj.forEach((item) => {
-				this.listTasks.push(new Item(uuid(), item, 'A'));
+				this.listTasks.push(new Item(uuid(), item, this.itemStatusActive));
 			})
 		);
-		// this.listTasks.push(new Item(uuid(), 'attend the boot camp', 'A'));
-		// this.listTasks.push(new Item(uuid(), 'do the homework', 'A'));
-		// this.listTasks.push(new Item(uuid(), 'bring candy to Juan', 'A'));
-		// this.listTasks.push(new Item(uuid(), 'participate', 'A'));
 	}
 
 	onKeyPressInput($event) {
 		if ($event.target.value.trim()) {
-			this.listTasks.push(new Item(uuid(), $event.target.value.trim(), 'A'));
+			this.listTasks.push(
+				new Item(uuid(), $event.target.value.trim(), this.itemStatusActive)
+			);
 			$event.target.value = '';
-			this.selectAll = true;
+			this.optionSelectedAll = true;
 		}
 	}
 
@@ -43,14 +43,20 @@ export class AppComponent {
 	}
 
 	onChangeSelectedItem($event) {
-		this.selectAll = true;
+		this.optionSelectedAll = true;
+		if (this.getItemsLeft() === 0) {
+			this.optionSelectedAll = false;
+		}
 	}
 
-	clickSelectAll() {
-		for (let index = 0; index < this.listTasks.length; index++) {
-			this.listTasks[index].itemStatus = this.selectAll ? 'C' : 'A';
-		}
-		this.selectAll = !this.selectAll;
+	clickOptionSelectedAll() {
+		this.listTasks.map(
+			(itemTaskList) =>
+				(itemTaskList.itemStatus = this.optionSelectedAll
+					? this.itemStatusComplete
+					: this.itemStatusActive)
+		);
+		this.optionSelectedAll = !this.optionSelectedAll;
 	}
 
 	onMouseLeave($event) {
@@ -62,19 +68,25 @@ export class AppComponent {
 	}
 
 	onClickClearComplete() {
-		this.listTasks = this.listTasks.filter((obj) => obj.itemStatus !== 'C');
+		this.listTasks = this.listTasks.filter((obj) => obj.itemStatus !== this.itemStatusComplete);
 	}
 
 	onClickComplete() {
-		this.statusShow = 'C';
+		this.globalStatusSelected = this.itemStatusComplete;
 	}
 
 	onClickActive() {
-		this.statusShow = 'A';
+		this.globalStatusSelected = this.itemStatusActive;
 	}
 
 	onClickAll() {
-		this.statusShow = 'ALL';
+		this.globalStatusSelected = 'ALL';
+	}
+
+	showButtonClealAll() {
+		return !(
+			this.listTasks.filter((task) => task.itemStatus === this.itemStatusComplete).length > 0
+		);
 	}
 
 	private getItemsLeft() {

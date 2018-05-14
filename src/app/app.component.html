@@ -1,16 +1,17 @@
 <div class="mainTitle">
-    {{title}} - {{author}}
+    {{title}}
 </div>
 <div>
     <input type="text"
            (keyup.enter)="onKeyPressInput($event)">
-    <label (click)="clickSelectAll()"
+    <label *ngIf="listTasks.length>0"
+           (click)="clickOptionSelectedAll()"
            class="lblSelectAll">+</label>
 
     <ul>
         <app-items *ngFor="let task of listTasks"
                    [task]="task"
-                   [statusShow]="statusShow"
+                   [globalStatusSelected]="globalStatusSelected"
                    (removeItem)="onRemoveItem($event)"
                    (changeSelectedItem)="onChangeSelectedItem($event)">
         </app-items>
@@ -29,8 +30,10 @@
         <button (mouseenter)="onMouseEnter($event)"
                 (mouseleave)="onMouseLeave($event)"
                 (click)="onClickComplete()">Completed</button>
-        <button (mouseenter)="onMouseEnter($event)"
+        <button *ngIf="listTasks.length>0"
+                (mouseenter)="onMouseEnter($event)"
                 (mouseleave)="onMouseLeave($event)"
+                [ngClass]="{'buttonHidden': showButtonClealAll()}"
                 (click)="onClickClearComplete()">Clear completed</button>
     </div>
 </div>
